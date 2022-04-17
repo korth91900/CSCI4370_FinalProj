@@ -9,7 +9,7 @@
 </header>
 
 <div class="testDiv"> 
-	<p> This is the home page. </p>
+	<p> This is the search page. </p>
 </div>
 
 </body>
