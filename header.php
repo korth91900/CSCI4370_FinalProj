@@ -5,6 +5,8 @@
 		margin: 0;
 		display: block;
 		align-item: center;
+		width: 850px;
+		max-width: 1000px;
 	}
 	
 	.navbar_searchBox input.searchEntry {

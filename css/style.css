@@ -34,3 +34,34 @@ body {
 .popularBooksDisplay_entry a {
 	text-decoration: none;
 }
+
+/* ============== */
+/* Book */
+/* ============== */
+
+.book_topTitle {
+	margin: 4px 0px;
+	font-size: 28px;
+}
+
+.book_imageAndDetails {
+	border: 1.5px outset slateblue;
+	display: block;
+	padding: 4px;
+	width: 250px;
+	
+}
+
+.book_imageAndDetails img {
+	
+}
+
+.book_detailsText {
+	font-weight: bold;
+	font-size: 24px;
+	margin: 0px 0px 12px 0px;
+}
+
+.book_releaseDate, .book_genres, .book_publisher, .book_isbn {
+	margin: 3px 0px;
+}
