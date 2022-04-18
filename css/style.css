@@ -18,3 +18,19 @@ body {
   font-size: 15px;
   text-align: center;
 }
+
+.popularBooksDisplay {
+	display: flex;
+	flex-wrap: wrap;
+	
+}
+
+.popularBooksDisplay_entry {
+	display: block;
+	width: 200px;
+	margin: 4px;
+}
+
+.popularBooksDisplay_entry a {
+	text-decoration: none;
+}
