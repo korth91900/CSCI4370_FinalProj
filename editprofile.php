@@ -20,7 +20,7 @@ require('database.php');
 </header>
 
 <div class="testDiv"> 
-	<p> This is the search page. </p>
+	<p> This is the customer profile page. </p>
 </div>
 
 </body>

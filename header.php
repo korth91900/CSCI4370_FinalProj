@@ -1,3 +1,21 @@
+<?php
+// require('database.php');
+if (isset($_SESSION["cid"])) {
+	$cid = $_SESSION["cid"];
+	$query = "SELECT username FROM customer WHERE cid='$cid'";
+	$result = $db->prepare($query);
+	$result->execute();	
+	$username = $result->fetch();
+	$result->closeCursor();
+}
+
+if(str_contains($_SERVER['REQUEST_URI'], 'sign_in.php')) 
+	$style = 'style="background-color:#BEFFFF;float:right;"';
+else 
+	$style = 'style="float:right;"';
+
+?>
+
 <style>
 	.navbar {
 		border: 1.5px outset slateblue;
@@ -40,7 +58,9 @@
 </style>
 
 <?php
+
 $search = "";
+$currPageBtnCSS = 'style="background-color:#EEFFFF;"';
 ?>
 
 <nav class="navbar">
@@ -56,14 +76,39 @@ $search = "";
 				<input class="searchButton" style="margin-left: 2px;" type="submit" value="Search" />
 			</form>
 		</li>
+		
+		<?php if(isset($_SESSION["loggedin"])) : ?>
+			<!-- header link will look selected if you're on that page -->
+			<li <?php if(str_contains($_SERVER['REQUEST_URI'], 'wishlist.php')) 
+				echo $currPageBtnCSS; ?>>
+			<a href="wishlist.php">Wishlist</a> | </li>
+			
+			<?php if(isset($_GET['logout'])) {
+				session_unset();
+				session_destroy();
+				setcookie("rememberme", TRUE, time()-100);
+				header('Location: ../CSCI4370_FinalProj');
+				}?>
+			<li class="log" style="float:right";>
+				<a href="?logout">Logout</a> | 
+			</li>
+			
+			<li class="log" <?php 
+				if(str_contains($_SERVER['REQUEST_URI'], 'editprofile.php')) 
+					echo $currPageBtnCSS;
+				else 
+					echo 'style="float:right;"';?>>
+				<a href="editprofile.php" class="headUser"><?php echo $username['username'] ?></a>
+			</li>
+		<?php else : ?>
+			<li class="navbar_signIn">
+				<a href="sign_in.php">Sign In</a> |
+			</li>
 
-		<li class="navbar_signIn">
-			<a href="signIn.php">Sign In</a> |
-		</li>
-
-		<li class="navbar_register">
-			<a href="register.php">Register</a>
-		</li>
-
+			<li class="navbar_register">
+				<a href="register.php">Register</a>
+			</li>
+		<?php endif; ?>	
+		
 	</ul>
 </nav>

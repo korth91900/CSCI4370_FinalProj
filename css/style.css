@@ -39,9 +39,13 @@ body {
 /* Book */
 /* ============== */
 
-.book_topTitle {
+.book_topTitleAndAuthor {
 	margin: 4px 0px;
 	font-size: 28px;
+}
+
+.book_outer {
+	display: flex;
 }
 
 .book_imageAndDetails {
@@ -49,11 +53,6 @@ body {
 	display: block;
 	padding: 4px;
 	width: 250px;
-	
-}
-
-.book_imageAndDetails img {
-	
 }
 
 .book_detailsText {
@@ -64,4 +63,8 @@ body {
 
 .book_releaseDate, .book_genres, .book_publisher, .book_isbn {
 	margin: 3px 0px;
+}
+
+.book_description {
+	width: 500px;
 }
