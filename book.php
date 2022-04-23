@@ -6,6 +6,10 @@ require('database.php');
 
 $book = $_GET['book'];
 
+if(isset($_SESSION["loggedin"])) {
+  $customer_id = $_SESSION["cid"];
+}
+
 //get the book info
 $bookQ = "SELECT * FROM books WHERE bid=" . $book;
 $s1 = $db->prepare($bookQ);
@@ -33,6 +37,9 @@ $results = $results[0];
 	by <?php echo $results['author']; ?>
 </div>
 
+<iframe name="content" style="display:none;">
+</iframe>
+<form method="POST" name="wishlist" action="addToUserWishlist.php" target="content">
 <div class="book_outer">
 	<div class="book_imageAndDetails">
 		<img alt="Book Image" src="book_imgs/<?php echo $results['image']; ?>" width="250" height="250">
@@ -62,13 +69,21 @@ $results = $results[0];
 		<div class="book_isbn">
 			<span style="font-weight: bold"> ISBN: </span> <?php echo $results['ISBN']; ?>
 		</div>
+		
+		<?php if(isset($_SESSION["loggedin"])) : ?>		
+	    <div class="addWishlist">
+		  <input type="hidden" name="bookID" value="<?php echo $results['bid']; ?>">
+		  <input type="hidden" name="customerID" value="<?php echo $customer_id; ?>">  
+		  <input type="submit" value="Add to Wishlist" class="wishlistAddButton">
+	    </div>
+	  <?php endif; ?>
 	</div>
 
 	<div class="book_description">
 		<?php echo $results['description']; ?>
 	</div>
-
 </div>
+</form>
 
 </body>
 </html>
