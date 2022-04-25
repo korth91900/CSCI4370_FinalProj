@@ -23,7 +23,7 @@ $statement1 -> closeCursor();
 </header>
 
 <div class="testDiv"> 
-	<p> This is the home page. </p>
+	<p> This is the home page. So you should not be messing with it??? :( </p>
 </div>
 
 <br>
