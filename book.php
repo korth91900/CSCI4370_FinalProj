@@ -39,7 +39,7 @@ $results = $results[0];
 
 <iframe name="content" style="display:none;">
 </iframe>
-<form method="POST" name="wishlist" action="addToUserWishlist.php" target="content">
+<form method="POST" name="wishlist" action = "addToUserWishlist.php" target="content">
 <div class="book_outer">
 	<div class="book_imageAndDetails">
 		<img alt="Book Image" src="book_imgs/<?php echo $results['image']; ?>" width="250" height="250">
@@ -70,12 +70,22 @@ $results = $results[0];
 			<span style="font-weight: bold"> ISBN: </span> <?php echo $results['ISBN']; ?>
 		</div>
 		
+
 		<?php if(isset($_SESSION["loggedin"])) : ?>		
-	    <div class="addWishlist">
+	    
+		<div class="addWishlist" >
 		  <input type="hidden" name="bookID" value="<?php echo $results['bid']; ?>">
 		  <input type="hidden" name="customerID" value="<?php echo $customer_id; ?>">  
-		  <input type="submit" value="Add to Wishlist" class="wishlistAddButton">
+		  <input type="submit" name="action1" value="Add to Wishlist" class="wishlistAddButton">
 	    </div>
+
+		
+		<div class="addBookshelf">
+		  <input type="hidden" name="bookID" value="<?php echo $results['bid']; ?>">
+		  <input type="hidden" name="customerID" value="<?php echo $customer_id; ?>">  
+		  <input type="submit" name="action2" value="Add to Bookshelf" class="bookshelfAddButton">
+	    </div>
+
 	  <?php endif; ?>
 	</div>
 

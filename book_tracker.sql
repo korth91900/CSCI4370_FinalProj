@@ -174,6 +174,15 @@ CREATE TABLE `wishlist` (
   `note` varchar(300) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `bookshelf` (
+  `bkID` int(11) NOT NULL,
+  `cid` int(11) NOT NULL,
+  `bid` int(11) NOT NULL,
+  `note` varchar(300) DEFAULT NULL,
+  `status` varchar(300) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
 --
 -- Indexes for dumped tables
 --
@@ -216,6 +225,10 @@ ALTER TABLE `wishlist`
 --
 -- AUTO_INCREMENT for table `books`
 --
+
+ALTER TABLE `bookshelf`
+   ADD PRIMARY KEY (`bkid`)
+
 ALTER TABLE `books`
   MODIFY `bid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
@@ -242,6 +255,13 @@ ALTER TABLE `review`
 --
 ALTER TABLE `wishlist`
   MODIFY `wid` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+--
+-- AUTO_INCREMENT for table `bookshelf`
+--
+ALTER TABLE `bookshelf`
+  MODIFY `bkid` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
