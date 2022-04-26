@@ -39,11 +39,12 @@ session_start();
 
 			if ($password_table!== FALSE) {
 				if (is_null($password_table['password'])) {
-				$loginErr = "Incorrect Username or Password";
+					$loginErr = "Incorrect Username or Password";
 				} 
 				else if (password_verify($password, $password_table['password'])) {
+							if ($check=='1') {
 								setcookie("rememberme", TRUE, time()+3600);
-						
+							}						
 							$_SESSION["loggedin"] = TRUE;
 							// add customer id to cookies
 							$idquery = "SELECT cid FROM customer WHERE username='$username'";
@@ -53,17 +54,13 @@ session_start();
 							$row->closeCursor();
 							$_SESSION["cid"] = $id['cid'];
 							header('Location: ../CSCI4370_FinalProj');
-
-
 				} else {
 					$loginErr = "Incorrect Username or Password";
 				}
 			} else {
 				$loginErr = "Incorrect Username or Password";
 			}
-			
 
-			
 			// while ($row = $password_query->fetch(PDO::FETCH_ASSOC)) {
 			// 	$passwordErr = password_verify($password, $row('password'));
 			// }
