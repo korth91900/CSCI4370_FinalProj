@@ -31,26 +31,64 @@ session_start();
 		//Check if there are no errors
 		if (empty($usernameErr) && empty($passwordErr)) {
 
-			$query="SELECT * FROM customer WHERE username='$username' AND password='$password'";
-		
-			$data=$db->query($query);
-			if ($data->rowCount() >0) {
-				if ($check=='1') {
-					setcookie("rememberme", TRUE, time()+3600);
+			$password_query =$db->prepare("SELECT password FROM customer WHERE username = :username ");
+			$password_query->bindParam(':username', $username);
+			$password_query->execute();
+			$password_table = $password_query->fetch(PDO::FETCH_ASSOC);
+			$password_query->closeCursor();
+
+			if ($password_table!== FALSE) {
+				if (is_null($password_table['password'])) {
+				$loginErr = "Incorrect Username or Password";
+				} 
+				else if (password_verify($password, $password_table['password'])) {
+								setcookie("rememberme", TRUE, time()+3600);
+						
+							$_SESSION["loggedin"] = TRUE;
+							// add customer id to cookies
+							$idquery = "SELECT cid FROM customer WHERE username='$username'";
+							$row = $db->prepare($idquery);
+							$row->execute();
+							$id = $row->fetch();
+							$row->closeCursor();
+							$_SESSION["cid"] = $id['cid'];
+							header('Location: ../CSCI4370_FinalProj');
+
+
+				} else {
+					$loginErr = "Incorrect Username or Password";
 				}
-				$_SESSION["loggedin"] = TRUE;
-				// add customer id to cookies
-				$idquery = "SELECT cid FROM customer WHERE username='$username'";
-				$row = $db->prepare($idquery);
-				$row->execute();
-				$id = $row->fetch();
-				$row->closeCursor();
-				$_SESSION["cid"] = $id['cid'];
-				header('Location: ../CSCI4370_FinalProj');
-			}
-			else {
+			} else {
 				$loginErr = "Incorrect Username or Password";
 			}
+			
+
+			
+			// while ($row = $password_query->fetch(PDO::FETCH_ASSOC)) {
+			// 	$passwordErr = password_verify($password, $row('password'));
+			// }
+			
+			// $query="SELECT * FROM customer WHERE username='$username' AND password='$password'";
+			
+
+			// $data=$db->query($query);
+			// if ($data->rowCount() >0) {
+			// 	if ($check=='1') {
+			// 		setcookie("rememberme", TRUE, time()+3600);
+			// 	}
+			// 	$_SESSION["loggedin"] = TRUE;
+			// 	// add customer id to cookies
+			// 	$idquery = "SELECT cid FROM customer WHERE username='$username'";
+			// 	$row = $db->prepare($idquery);
+			// 	$row->execute();
+			// 	$id = $row->fetch();
+			// 	$row->closeCursor();
+			// 	$_SESSION["cid"] = $id['cid'];
+			// 	header('Location: ../CSCI4370_FinalProj');
+			// }
+			// else {
+			// 	$loginErr = "Incorrect Username or Password";
+			// }
 		}
 	}
 

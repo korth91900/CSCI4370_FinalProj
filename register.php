@@ -62,13 +62,14 @@
 			$passwordErr = "*Password is required";
 		} else {
 			$password=str_replace('\'','\\\'',$_POST['password']);
+			$hashedpassword = password_hash($password, PASSWORD_BCRYPT);
 		}
 
 		//Check if there are no errors
 		if (empty($fullnameErr) && empty($phoneErr) && empty($usernameErr) && empty($emailErr) && empty($passwordErr)) {
 
 			$query = "INSERT INTO customer (full_name, phone, username, email, password)
-			VALUES ('$fullname', '$phone', '$username', '$email', '$password')";
+			VALUES ('$fullname', '$phone', '$username', '$email', '$hashedpassword')";
 		
 			$data=$db->query($query);
 			header('Location: ../CSCI4370_FinalProj');

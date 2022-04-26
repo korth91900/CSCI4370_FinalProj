@@ -72,7 +72,7 @@ INSERT INTO `books` (`bid`, `ISBN`, `title`, `author`, `publisher`, `description
 CREATE TABLE `customer` (
   `cid` int(11) NOT NULL,
   `full_name` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `phone` varchar(16) NOT NULL,
   `username` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL
@@ -249,15 +249,6 @@ CREATE TABLE `wishlist` (
     ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `bookshelf` (
-  `bkID` int(11) NOT NULL,
-  `cid` int(11) NOT NULL,
-  `bid` int(11) NOT NULL,
-  `note` varchar(300) DEFAULT NULL,
-  `status` varchar(300) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-
 --
 -- Indexes for table `wishlist`
 --
@@ -289,19 +280,6 @@ COMMIT;
 
 
 
-
-
-
-
-
-
-
---
--- AUTO_INCREMENT for table `bookshelf`
---
-ALTER TABLE `bookshelf`
-  MODIFY `bkid` int(11) NOT NULL AUTO_INCREMENT;
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
