@@ -82,6 +82,10 @@ $currPageBtnCSS = 'style="background-color:#EEFFFF;"';
 			<li <?php if(str_contains($_SERVER['REQUEST_URI'], 'wishlist.php')) 
 				echo $currPageBtnCSS; ?>>
 			<a href="wishlist.php">Wishlist</a> | </li>
+
+			<li <?php if(str_contains($_SERVER['REQUEST_URI'], 'bookshelf.php')) 
+				echo $currPageBtnCSS; ?>>
+			<a href="bookshelf.php">BookShelf</a> | </li>
 			
 			<?php if(isset($_GET['logout'])) {
 				session_unset();

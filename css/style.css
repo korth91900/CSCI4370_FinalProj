@@ -159,3 +159,83 @@ body {
 	width: 800px;
 	height: 20px;
 }
+
+
+
+/* ============== */
+/* Bookshelf */
+/* ============== */
+
+#bookshelf-container {
+	display: table;
+	margin: 0 auto;
+}
+
+#bookshelf-container a {
+  color: black;
+  text-decoration: underline
+}
+
+.bookshelfEntry {
+	display: table;
+	background-color: #99EEFF;
+	border: 2px solid slateblue;
+	margin: 5px;
+	width: 800px;
+	height: 20px;
+}
+.bookshelfEntry img {
+	width: 150px;
+	float: left;
+	border: 1px solid slateblue;
+}
+
+.bookshelfEntry h2 {
+	margin-left: 152px;
+}
+
+.bookshelfRemoveButton {
+	float: right;
+}
+
+.bookshelf-aboveNotes {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.bookshelf-aboveNotes p {
+	margin-left: 152px;
+}
+
+.bookshelf-Notes {
+	display: table;
+	clear: left;
+}
+
+
+.bookshelf-textarea {
+	margin: 5px;
+	width: 785px;
+	max-width: 785px;
+	min-width: 785px;
+	min-height: 50px;
+}
+
+.bookshelf-saveNotes {
+	margin: 0px 0px 5px 5px;
+}
+
+#bookshelf-empty {
+	display: table;
+	margin: 0 auto;
+}
+
+.bookshelf-empty-text {
+	display: table;
+	text-align: center;
+	background-color: #99EEFF;
+	border: 2px solid slateblue;
+	margin: 5px;
+	width: 800px;
+	height: 20px;
+}
