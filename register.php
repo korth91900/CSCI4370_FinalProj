@@ -25,6 +25,12 @@
 			$phoneErr = "*Phone Number is required";
 		} else {
 			$phone=str_replace('\'','\\\'',$_POST['phone']);
+			if (!validate_phone($phone)) {
+				$phoneErr = "*Invalid phone number format";
+			}
+			if (!validate_phone_exists($db, $phone)) {
+				$phoneErr = "*An account already exists with this phone number";
+			}
 		}
 		
 		// get username
@@ -32,6 +38,9 @@
 			$usernameErr = "*Username is required";
 		} else {
 			$username=str_replace('\'','\\\'',$_POST['username']);
+			if (!validate_name($db, $username)) {
+				$usernameErr = "*An account already exists with this username";
+			}
 		}
 
 		// get email
@@ -41,6 +50,10 @@
 			$email=$_POST['email'];
 			if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 				$emailErr = "*Invalid email format";
+			}
+
+			if (!validate_email($db, $email)) {
+				$emailErr = "*An account already exists with this email";
 			}
 		}
 
@@ -59,6 +72,46 @@
 		
 			$data=$db->query($query);
 			header('Location: ../CSCI4370_FinalProj');
+		}
+	}
+
+	function validate_phone($phone) {
+		$filtered_phone_number = filter_var($phone, FILTER_SANITIZE_NUMBER_INT);
+		$check = str_replace("-","",$filtered_phone_number);
+		if (strlen($check) <= 13 && strlen($check) >= 10) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	function validate_phone_exists($db, $phone) {
+		$query = "SELECT phone FROM customer WHERE phone='{$phone}'";
+		$data =  $db->query($query);
+		if ($data->rowCount() > 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	function validate_name($db, $name) {
+		$query = "SELECT full_name FROM customer WHERE username='{$name}'";
+		$data =  $db->query($query);
+		if ($data->rowCount() > 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	function validate_email($db, $email) {
+		$query = "SELECT email FROM customer WHERE email='{$email}'";
+		$data =  $db->query($query);
+		if ($data->rowCount() > 0) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 ?>
