@@ -23,39 +23,7 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `bookgenre`
---
 
-CREATE TABLE `bookgenre` (
-  `bid` int(11) NOT NULL,
-  `gid` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `bookgenre`
---
-
-INSERT INTO `bookgenre` (`bid`, `gid`) VALUES
-(1, 1),
-(1, 6),
-(1, 9),
-(1, 16),
-(1, 17),
-(2, 1),
-(2, 6),
-(2, 9),
-(2, 16),
-(2, 17),
-(3, 1),
-(3, 8),
-(3, 14),
-(3, 17),
-(3, 30),
-(4, 1),
-(4, 14),
-(4, 28),
-(4, 29);
 
 -- --------------------------------------------------------
 
@@ -75,6 +43,16 @@ CREATE TABLE `books` (
   `reviewScore` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Indexes for table `books`
+--
+ALTER TABLE `books`
+  ADD PRIMARY KEY (`bid`);
+
+  --
+-- AUTO_INCREMENT for table `books`
+--
+ALTER TABLE `books`
+  MODIFY `bid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- Dumping data for table `books`
 --
@@ -100,8 +78,35 @@ CREATE TABLE `customer` (
   `email` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Indexes for table `customer`
+--
+ALTER TABLE `customer`
+  ADD PRIMARY KEY (`cid`);
+
+--
+-- AUTO_INCREMENT for table `customer`
+--
+ALTER TABLE `customer`
+  MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 -- --------------------------------------------------------
 
+CREATE TABLE `bookshelf` (
+  `bkID` int(11) NOT NULL,
+  `cid` int(11) NOT NULL,
+  `bid` int(11) NOT NULL,
+  `note` varchar(300) DEFAULT NULL,
+  `status` varchar(300) DEFAULT NULL,
+  FOREIGN KEY(cid) REFERENCES customer(cid) ON DELETE CASCADE,
+  FOREIGN KEY(bid) REFERENCES books(bid) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `bookshelf`
+   ADD PRIMARY KEY (`bkid`);
+
+ALTER TABLE `bookshelf`
+  MODIFY `bkid` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;   
 --
 -- Table structure for table `genre`
 --
@@ -111,6 +116,18 @@ CREATE TABLE `genre` (
   `genre_name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Indexes for table `genre`
+--
+ALTER TABLE `genre`
+  ADD PRIMARY KEY (`gid`),
+  ADD UNIQUE KEY `genre_name` (`genre_name`);
+
+  --
+-- AUTO_INCREMENT for table `genre`
+--
+ALTER TABLE `genre`
+  MODIFY `gid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 --
 -- Dumping data for table `genre`
 --
@@ -147,6 +164,41 @@ INSERT INTO `genre` (`gid`, `genre_name`) VALUES
 (15, 'Western'),
 (16, 'Young Adult');
 
+--
+-- Table structure for table `bookgenre`
+--
+
+CREATE TABLE `bookgenre` (
+  `bid` int(11) NOT NULL,
+  `gid` int(11) NOT NULL,
+  FOREIGN KEY(bid) REFERENCES books(bid) ON DELETE CASCADE,
+  FOREIGN KEY(gid) REFERENCES genre(gid) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `bookgenre`
+--
+
+INSERT INTO `bookgenre` (`bid`, `gid`) VALUES
+(1, 1),
+(1, 6),
+(1, 9),
+(1, 16),
+(1, 17),
+(2, 1),
+(2, 6),
+(2, 9),
+(2, 16),
+(2, 17),
+(3, 1),
+(3, 8),
+(3, 14),
+(3, 17),
+(3, 30),
+(4, 1),
+(4, 14),
+(4, 28),
+(4, 29);
 -- --------------------------------------------------------
 
 --
@@ -156,11 +208,28 @@ INSERT INTO `genre` (`gid`, `genre_name`) VALUES
 CREATE TABLE `review` (
   `rid` int(11) NOT NULL,
   `bid` int(11) NOT NULL,
-  `cid` int(11) NOT NULL,
+  `cid` int(11),
   `score` int(11) NOT NULL,
-  `review_text` varchar(500) NOT NULL
+  `review_text` varchar(500) NOT NULL,
+  FOREIGN KEY(cid)
+    REFERENCES customer(cid)
+    ON DELETE SET NULL,
+  FOREIGN KEY(bid)
+    REFERENCES books(bid)
+    ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Indexes for table `review`
+--
+ALTER TABLE `review`
+  ADD PRIMARY KEY (`rid`);
+
+--
+-- AUTO_INCREMENT for table `review`
+--
+ALTER TABLE `review`
+  MODIFY `rid` int(11) NOT NULL AUTO_INCREMENT;
 -- --------------------------------------------------------
 
 --
@@ -171,7 +240,13 @@ CREATE TABLE `wishlist` (
   `wid` int(11) NOT NULL,
   `cid` int(11) NOT NULL,
   `bid` int(11) NOT NULL,
-  `note` varchar(300) DEFAULT NULL
+  `note` varchar(300) DEFAULT NULL,
+  FOREIGN KEY(cid)
+    REFERENCES customer(cid)
+    ON DELETE CASCADE,
+  FOREIGN KEY(bid)
+    REFERENCES books(bid)
+    ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `bookshelf` (
@@ -184,71 +259,10 @@ CREATE TABLE `bookshelf` (
 
 
 --
--- Indexes for dumped tables
---
-
---
--- Indexes for table `books`
---
-ALTER TABLE `books`
-  ADD PRIMARY KEY (`bid`);
-
---
--- Indexes for table `customer`
---
-ALTER TABLE `customer`
-  ADD PRIMARY KEY (`cid`);
-
---
--- Indexes for table `genre`
---
-ALTER TABLE `genre`
-  ADD PRIMARY KEY (`gid`),
-  ADD UNIQUE KEY `genre_name` (`genre_name`);
-
---
--- Indexes for table `review`
---
-ALTER TABLE `review`
-  ADD PRIMARY KEY (`rid`);
-
---
 -- Indexes for table `wishlist`
 --
 ALTER TABLE `wishlist`
   ADD PRIMARY KEY (`wid`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `books`
---
-
-ALTER TABLE `bookshelf`
-   ADD PRIMARY KEY (`bkid`)
-
-ALTER TABLE `books`
-  MODIFY `bid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `customer`
---
-ALTER TABLE `customer`
-  MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `genre`
---
-ALTER TABLE `genre`
-  MODIFY `gid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
-
---
--- AUTO_INCREMENT for table `review`
---
-ALTER TABLE `review`
-  MODIFY `rid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `wishlist`
@@ -256,6 +270,31 @@ ALTER TABLE `review`
 ALTER TABLE `wishlist`
   MODIFY `wid` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
+--
+-- Indexes for dumped tables
+--
+
+--
+
+
+
+
+
+
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+
+
+
+
+
+
+
+
+
 
 --
 -- AUTO_INCREMENT for table `bookshelf`
