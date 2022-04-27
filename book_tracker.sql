@@ -40,7 +40,7 @@ CREATE TABLE `books` (
   `description` varchar(700) NOT NULL,
   `release_date` date DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL,
-  `reviewScore` int(11) DEFAULT NULL
+  `reviewScore` double(11, 1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Indexes for table `books`
@@ -284,3 +284,12 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+-- Trigger for review score
+
+CREATE TRIGGER updateAverage
+AFTER INSERT ON review
+FOR EACH ROW
+  UPDATE books
+  SET reviewScore = (SELECT AVG(score) FROM review WHERE review.bid = books.bid)
+  WHERE bid = NEW.bid;
