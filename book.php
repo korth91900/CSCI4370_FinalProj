@@ -94,6 +94,22 @@ $results = $results[0];
 	</div>
 </div>
 </form>
-
+		<?php if(isset($_SESSION["loggedin"])) : ?>
+			<h1 style= "text-align: center;"> Add a review </h1>
+			<form method="POST" name="review" action = "addToReviews.php" target="content">
+				<input type="hidden" name="bookID" value="<?php echo $results['bid']; ?>">
+				<input type="hidden" name="customerID" value="<?php echo $customer_id; ?>">
+				
+					<label> 1 </label><input type="radio" name="score" value="1">
+				<label> 2 </label> <input type="radio" name="score" value="2">
+				<label> 3 </label> <input type="radio" name="score" value="3">
+				<label> 4 </label> <input type="radio" name="score" value="4">
+				<label> 5 </label> <input type="radio" name="score" value="5">
+			
+				
+				<input type="text" name="text" > 
+				<input type="submit" >
+			</form>
+			<?php endif; ?>
 </body>
 </html>
