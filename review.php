@@ -8,12 +8,12 @@ if(isset($_SESSION["loggedin"])) {
 }
 
 
-$bookQ = "SELECT * FROM review, customer WHERE (review.cid = customer.cid) AND bid=" . $book  ; //OR review.cid IS NULL
+$bookQ = "SELECT * FROM books WHERE bid=" . $book ; 
 $s1 = $db->prepare($bookQ);
 $s1->execute();
 $results = $s1->fetchAll();	
 $s1->closeCursor();
-
+$results = $results[0];
 
 ?>
 
@@ -47,7 +47,7 @@ $s1->closeCursor();
 		<?php if(isset($_SESSION["loggedin"])) : ?>
 			<h1 style= "text-align: center;"> Add a review </h1>
 			<form method="POST" name="review" action = "addToReviews.php" target="content">
-				<input type="hidden" name="bookID" value="<?php echo $results[0]['bid']; ?>">
+				<input type="hidden" name="bookID" value="<?php echo $results['bid']; ?>">
 				<input type="hidden" name="customerID" value="<?php echo $customer_id; ?>">
 				
                 <div class ="num">

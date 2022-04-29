@@ -3,7 +3,9 @@
 require('database.php');
 
 // Gets the user id from the session
-$customer_id = $_SESSION["cid"];
+if(isset($_SESSION["loggedin"])) {
+    $customer_id = $_SESSION["cid"];
+  }
 
 $book = $_GET['book'];
 
@@ -21,6 +23,7 @@ $s1 = $db->prepare($bookQ);
 $s1->execute();
 $results = $s1->fetchAll();	
 $s1->closeCursor();
+
 
 ?>
 
