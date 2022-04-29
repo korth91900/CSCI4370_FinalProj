@@ -96,7 +96,7 @@ CREATE TABLE `bookshelf` (
   `cid` int(11) NOT NULL,
   `bid` int(11) NOT NULL,
   `note` varchar(300) DEFAULT NULL,
-  `status` varchar(300) DEFAULT NULL,
+  `status` varchar(300) DEFAULT "Not Started",
   FOREIGN KEY(cid) REFERENCES customer(cid) ON DELETE CASCADE,
   FOREIGN KEY(bid) REFERENCES books(bid) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

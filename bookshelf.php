@@ -75,6 +75,7 @@ $statement1 -> closeCursor();
 	  </form>
       <h2><a href="<?php echo 'book.php?book=' . $book['bid']; ?>"><?php echo $book['title']; ?>: <?php echo $book['author']; ?> </a></h2>
       <p class="placeDescription"> <?php echo $book['description']; ?> </p>
+	  <p><b>Current Status: </b><?php echo $book['status']; ?></p>
   	</div>
 	<br>
 
@@ -84,7 +85,7 @@ $statement1 -> closeCursor();
 
     <form method="POST" name="bookshelf" action="updateBookshelfNotes.php" target="content" id="update_notes_form">
 	<div class="container">
-				<input id = "in1" type="radio" name="statusRadio" value="Not Started" checked/>
+				<input id = "in1" type="radio" name="statusRadio" value="Not Started"/>
 				Not Started
 				<input id = "in1" type="radio" name="statusRadio" value="Currently Reading"/>
 				Currently Reading

@@ -94,7 +94,7 @@ $currPageBtnCSS = 'style="background-color:#EEFFFF;"';
 				header('Location: ../CSCI4370_FinalProj');
 				}?>
 			<li class="log" style="float:right";>
-				<a href="?logout">Logout</a> | 
+				<a href="?logout">Logout</a>  |
 			</li>
 			
 			<li class="log" <?php 

@@ -24,30 +24,60 @@ $s1->execute();
 $results = $s1->fetchAll();	
 $s1->closeCursor();
 
+$ne = "SELECT * FROM books WHERE bid=" . $book;
+$s1 = $db->prepare($ne);
+$s1->execute();
+$r1 = $s1->fetchAll();	
+$s1->closeCursor();
+$r1 = $r1[0];
+
 
 ?>
 
 <!DOCTYPE HTML>
 <html>
+
+<style>
+
+
+</style>
+
+<body>
+
+
     <h1 style = "text-align: center;">  Reviews </h1>
 
     <div class="popularBooksDisplay">
-<?php foreach ($results as $popularBook) : ?>
+<table border="1" cellspacing="0" cellpadding="10">
+    <tr>
+    <th width="200px">User Name</th>
+    <th width="100px">Score</th>
+    <th width="500px">Reviews</th>
+   </tr>
 
+    <?php foreach ($results as $popularBook) : ?>
+    <tr>
+    <td style= "text-align: center;"><?php echo $popularBook['full_name']; ?> </td>
+    <td style= "text-align: center;"><?php echo $popularBook['score']; ?></td>
+    <td><?php echo $popularBook['review_text']; ?></td>
+    </tr>
+    
 
-<div class="dis">
-    <hr>
-<span style="font-weight: bold"> RE TEXT: </span> <?php echo $popularBook['review_text']; ?>
+    <?php endforeach; ?>
 
-    <span style="font-weight: bold"> SCORE: </span> <?php echo $popularBook['score']; ?>
+    <tr>
+    <td style= "height: 20px;" colspan="3" ></td>
+    </tr>
+    <tr style= "text-align: center; font-size: 20px;">
+    
+    <td colspan="2"><b><i>Average Score</i></b></td>
+    <td><b><i> <?php echo $r1['reviewScore']; ?> </i></b> </td>
 
-    <span style="font-weight: bold"> userName ID : </span> <?php echo $popularBook['full_name']; ?>
-    <hr>
+    </tr>
+
+</table>
+
 </div>
 
-<?php endforeach; ?>
-
-</div>
-
-
+</body>
 </html>
