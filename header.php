@@ -1,13 +1,5 @@
 <?php
 // require('database.php');
-if (isset($_SESSION["cid"])) {
-	$cid = $_SESSION["cid"];
-	$query = "SELECT username FROM customer WHERE cid='$cid'";
-	$result = $db->prepare($query);
-	$result->execute();	
-	$username = $result->fetch();
-	$result->closeCursor();
-}
 
 if(str_contains($_SERVER['REQUEST_URI'], 'sign_in.php')) 
 	$style = 'style="background-color:#BEFFFF;float:right;"';
