@@ -233,10 +233,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getallBooks`()
 select * from books$$
 DELIMITER ;
 
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `searchBookAuthors`(IN `searchBar` VARCHAR(100))
-select * from books where author like concat('%',searchbar,'%')$$
-DELIMITER ;
+
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `searchBookGenre`(IN `genreParam` VARCHAR(50))
@@ -244,14 +241,17 @@ SELECT ISBN, title,author,publisher,release_date,description,image FROM bookgenr
 DELIMITER ;
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `searchBookPublishers`(IN `searchBar` VARCHAR(100))
-select * from books where publisher like concat('%',searchbar,'%')$$
+CREATE DEFINER=root@localhost PROCEDURE searchBooks(IN col_name VARCHAR(100), IN inp VARCHAR(100))
+BEGIN
+  SET @t1 = CONCAT( 'SELECT * FROM books where ',col_name, ' like "%',inp,'%"' ); -- <-- placeholder
+
+
+  PREPARE stmt3 FROM @t1;
+  EXECUTE stmt3; -- <-- input for placeholder
+  DEALLOCATE PREPARE stmt3;
+END$$
 DELIMITER ;
 
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `searchBookTitles`(IN `searchBar` VARCHAR(100))
-select * from books where title like concat('%',searchbar,'%')$$
-DELIMITER ;
 
 
 -- --------------------------------------------------------
