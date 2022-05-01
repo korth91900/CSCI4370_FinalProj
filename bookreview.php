@@ -57,7 +57,7 @@ $r1 = $r1[0];
 
     <?php foreach ($results as $popularBook) : ?>
     <tr>
-    <td style= "text-align: center;"><?php echo $popularBook['full_name']; ?> </td>
+    <td style= "text-align: center;"><?php echo $popularBook['username']; ?> </td>
     <td style= "text-align: center;"><?php echo $popularBook['score']; ?></td>
     <td><?php echo $popularBook['review_text']; ?></td>
     </tr>

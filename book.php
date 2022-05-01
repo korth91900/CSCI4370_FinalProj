@@ -65,7 +65,7 @@ $results = $results[0];
 			?>
 		</div>
 		<div class="book_publisher">
-			<span style="font-weight: bold"> Publisher: </span> <?php echo $results['release_date']; ?>
+			<span style="font-weight: bold"> Publisher: </span> <?php echo $results['publisher']; ?>
 		</div>
 		<div class="book_isbn">
 			<span style="font-weight: bold"> ISBN: </span> <?php echo $results['ISBN']; ?>

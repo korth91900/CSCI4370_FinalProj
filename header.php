@@ -94,16 +94,9 @@ $currPageBtnCSS = 'style="background-color:#EEFFFF;"';
 				header('Location: ../CSCI4370_FinalProj');
 				}?>
 			<li class="log" style="float:right";>
-				<a href="?logout">Logout</a>  |
+				<a href="?logout">Logout</a>
 			</li>
 			
-			<li class="log" <?php 
-				if(str_contains($_SERVER['REQUEST_URI'], 'editprofile.php')) 
-					echo $currPageBtnCSS;
-				else 
-					echo 'style="float:right;"';?>>
-				<a href="editprofile.php" class="headUser"><?php echo $username['username'] ?></a>
-			</li>
 		<?php else : ?>
 			<li class="navbar_signIn">
 				<a href="sign_in.php">Sign In</a> |

@@ -4,7 +4,7 @@ session_start();
 <?php
 require('database.php');
 
-$queryPopular = "SELECT * FROM books";
+$queryPopular = "SELECT * FROM books ORDER BY reviewScore DESC LIMIT 4";
 $statement1 = $db ->prepare($queryPopular);
 $statement1 -> execute();
 $popularBooks = $statement1->fetchAll();
@@ -21,10 +21,6 @@ $statement1 -> closeCursor();
 <header>
 <?php include('header.php'); ?>
 </header>
-
-<div class="testDiv"> 
-	<p> This is the home page. </p>
-</div>
 
 <br>
 

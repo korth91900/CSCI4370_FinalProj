@@ -46,10 +46,6 @@ $statement1 -> closeCursor();
 <?php include('header.php'); ?>
 </header>
 
-<div class="testDiv"> 
-	<p> This is the BookShelf page. </p>
-</div>
-
 <div id="bookshelf-container">
 
 <?php $bookshelfIteration = 0; ?>

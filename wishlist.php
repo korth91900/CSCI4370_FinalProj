@@ -40,10 +40,6 @@ $statement1 -> closeCursor();
 <?php include('header.php'); ?>
 </header>
 
-<div class="testDiv"> 
-	<p> This is the wishlist page. </p>
-</div>
-
 <div id="wishlist-container">
 
 <?php $wishlistIteration = 0; ?>
