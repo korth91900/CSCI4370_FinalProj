@@ -44,7 +44,6 @@ require('database.php');
 				$bookQ = "call searchBookTitles(?);";
 				break;
 			case "author":
-			echo "author";
 				$bookQ = "call searchBookAuthors(?);";
 				break;
 			case "publisher":

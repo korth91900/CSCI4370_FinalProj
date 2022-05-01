@@ -228,6 +228,32 @@ CREATE TRIGGER `updateAverage` AFTER INSERT ON `review` FOR EACH ROW UPDATE book
 $$
 DELIMITER ;
 
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getallBooks`()
+select * from books$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `searchBookAuthors`(IN `searchBar` VARCHAR(100))
+select * from books where author like concat('%',searchbar,'%')$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `searchBookGenre`(IN `genreParam` VARCHAR(50))
+SELECT ISBN, title,author,publisher,release_date,description,image FROM bookgenre inner join genre on genre.gid = bookgenre.gid inner join books on bookgenre.bid=books.bid where genre.genre_name = genreParam$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `searchBookPublishers`(IN `searchBar` VARCHAR(100))
+select * from books where publisher like concat('%',searchbar,'%')$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `searchBookTitles`(IN `searchBar` VARCHAR(100))
+select * from books where title like concat('%',searchbar,'%')$$
+DELIMITER ;
+
+
 -- --------------------------------------------------------
 
 --
