@@ -18,18 +18,18 @@ require('database.php');
 		$genreresult = $db->query($genreQ);
 	if (!isset($_POST['submit'])){
 		$bookQ = "call getallBooks();";
-		$result = $db->query($bookQ);
+		$bookresult = $db->query($bookQ);
 		
-		//$response = $result->fetch_all(MYSQLI_ASSOC);
+		//$response = $bookresult->fetch_all(MYSQLI_ASSOC);
 		//$result->closeCursor();
 	}
 	elseif (isset($_POST['genreParam']))
 	{
 		
 		$bookQ = "call searchBookGenre(?);";
-		$result =$db->prepare($bookQ);
-		$result->bindParam(1,$_POST['genreParam']);
-		$result->execute();
+		$bookresult =$db->prepare($bookQ);
+		$bookresult->bindParam(1,$_POST['genreParam']);
+		$bookresult->execute();
 		
 		
 	}
@@ -37,26 +37,11 @@ require('database.php');
 	elseif (!empty($_POST['searchBar'])) 
 	{
 		
-		switch($_POST['searchParam'])
-		{
-			case "title":
-				
-				$bookQ = "call searchBookTitles(?);";
-				break;
-			case "author":
-				$bookQ = "call searchBookAuthors(?);";
-				break;
-			case "publisher":
-				$bookQ = "call searchBookPublishers(?);";
-				break;
-			
-			
-			
-		}
-		
-		$result =$db->prepare($bookQ);
-		$result->bindParam(1,$_POST['searchBar']);
-		$result->execute();
+		$bookQ = "call searchBooks(?,?);";
+		$bookresult =$db->prepare($bookQ);
+		$bookresult->bindParam(1,$_POST['searchParam']);
+		$bookresult->bindParam(2,$_POST['searchBar']);
+		$bookresult->execute();
 		
 	}
 		
@@ -105,7 +90,7 @@ require('database.php');
 
   </tr>
 <?php  
-while( $row = $result->fetch(PDO::FETCH_ASSOC)) {?>
+while( $row = $bookresult->fetch(PDO::FETCH_ASSOC)) {?>
     <tr>
 	<td> <?php echo $row['title'];?></td>
     <td> <?php echo $row['author'];?></td>
