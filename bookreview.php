@@ -6,9 +6,14 @@ require('database.php');
 if(isset($_SESSION["loggedin"])) {
     $customer_id = $_SESSION["cid"];
   }
-
+if(isset($_GET['book']))
+{
 $book = $_GET['book'];
-
+}
+if(isset($_POST["bookid"]))
+{
+$book = $_POST["bookid"] ; 
+}
 // Gets each of the user's wishlist items
 // $queryReview = "SELECT review.score, review.review_text, books.title,books.author,
 // books.description,books.bid,books.image FROM review,books WHERE review.cid=:cID AND review.bid=books.bid;";

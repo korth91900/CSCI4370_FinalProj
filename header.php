@@ -1,5 +1,9 @@
 <?php
 // require('database.php');
+if (isset($_SESSION["cid"])) {
+	$cid = $_SESSION["cid"];
+	
+}
 
 if(str_contains($_SERVER['REQUEST_URI'], 'sign_in.php')) 
 	$style = 'style="background-color:#BEFFFF;float:right;"';

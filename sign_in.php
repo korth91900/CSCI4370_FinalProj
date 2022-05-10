@@ -47,12 +47,17 @@ session_start();
 							}						
 							$_SESSION["loggedin"] = TRUE;
 							// add customer id to cookies
-							$idquery = "SELECT cid FROM customer WHERE username='$username'";
+							/*$idquery = "SELECT cid FROM customer WHERE username='$username'";
 							$row = $db->prepare($idquery);
-							$row->execute();
-							$id = $row->fetch();
-							$row->closeCursor();
-							$_SESSION["cid"] = $id['cid'];
+							*/
+							$userQ = "call getUser(?);";
+							$result =$db->prepare($userQ);
+							$result->bindParam(1,$username);
+							$result->execute();
+							$row = $result->fetch(PDO::FETCH_ASSOC);
+							$result->closeCursor();
+							$_SESSION["cid"] = $row['cid'];
+							$_SESSION["clearance"] = $row['clearance'];
 							header('Location: ../CSCI4370_FinalProj');
 				} else {
 					$loginErr = "Incorrect Username or Password";

@@ -16,7 +16,8 @@ require('database.php');
 <?php
 	$genreQ = "select genre_name from genre;";
 		$genreresult = $db->query($genreQ);
-	if (!isset($_POST['submit'])){
+	if (!isset($_POST['submit']))
+	{
 		$bookQ = "call getallBooks();";
 		$bookresult = $db->query($bookQ);
 		
@@ -36,13 +37,23 @@ require('database.php');
 	
 	elseif (!empty($_POST['searchBar'])) 
 	{
+		if ($_SESSION["clearance"] == 2)
+			{
+				$bookQ = "call searchBooks(?,?);";
+				$bookresult =$db->prepare($bookQ);
+				$bookresult->bindParam(1,$_POST['searchParam']);
+				$bookresult->bindParam(2,$_POST['searchBar']);
+				$bookresult->execute();
+			}
 		
-		$bookQ = "call searchBooks(?,?);";
-		$bookresult =$db->prepare($bookQ);
-		$bookresult->bindParam(1,$_POST['searchParam']);
-		$bookresult->bindParam(2,$_POST['searchBar']);
-		$bookresult->execute();
-		
+		elseif ($_SESSION["clearance"] == 1)
+			{
+				$bookQ = "call searchBooksUnres(?,?);";
+				$bookresult =$db->prepare($bookQ);
+				$bookresult->bindParam(1,$_POST['searchParam']);
+				$bookresult->bindParam(2,$_POST['searchBar']);
+				$bookresult->execute();
+			}
 	}
 		
 
@@ -79,16 +90,6 @@ require('database.php');
 </div>
 
 <table border="2">
-  <tr>
-    <td>Title</td>
-    <td>Author</td>
-	<td>Cover</td>
-	<td>Description</td>
-	<td>Publisher</td>
-	<td>Release Date</td>
-	<td>ISBN</td>
-
-  </tr>
 <?php  
 while( $row = $bookresult->fetch(PDO::FETCH_ASSOC)) {?>
     <tr>
@@ -99,6 +100,13 @@ while( $row = $bookresult->fetch(PDO::FETCH_ASSOC)) {?>
 	<td> <?php echo $row['publisher'];?></td>
 	<td> <?php echo $row['release_date'];?></td>
 	<td> <?php echo $row['ISBN'];?></td> 
+	<td> 
+		<form method="post" action="book.php">
+		<input type="hidden" value="<?php echo $row['bid']?>" name = "bookid" >
+		<input type="submit" name="submit" id ="submit" value="<?php echo $row['reviewScore']?>"> </td> 
+		</form>
+			
+	
 	</tr>
 <?php } ?>
 
