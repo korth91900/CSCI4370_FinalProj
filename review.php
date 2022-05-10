@@ -1,14 +1,22 @@
 <?php
 require('database.php');
-
+if(isset($_GET['book']))
+{
 $book = $_GET['book'];
-
+}
 if(isset($_SESSION["loggedin"])) {
   $customer_id = $_SESSION["cid"];
 }
 
-
+if(isset($_POST["bookid"]))
+{
+$bookQ = "SELECT * FROM books WHERE bid=" . $_POST["bookid"] ; 
+	
+}
+else
+{
 $bookQ = "SELECT * FROM books WHERE bid=" . $book ; 
+}
 $s1 = $db->prepare($bookQ);
 $s1->execute();
 $results = $s1->fetchAll();	

@@ -1,5 +1,9 @@
 <?php
 // require('database.php');
+if (isset($_SESSION["cid"])) {
+	$cid = $_SESSION["cid"];
+	
+}
 
 if(str_contains($_SERVER['REQUEST_URI'], 'sign_in.php')) 
 	$style = 'style="background-color:#BEFFFF;float:right;"';
@@ -63,10 +67,10 @@ $currPageBtnCSS = 'style="background-color:#EEFFFF;"';
 		</li>
 
 		<li class="navbar_searchBox">
-			<form method="POST" name="searchBar" action="search.php">
-				<input class="searchEntry" type="search" name="query" placeholder="Search book title/author/ISBN" value="<?php echo $search;?>" />
-				<input class="searchButton" style="margin-left: 2px;" type="submit" value="Search" />
-			</form>
+			
+			<a href="search.php">Search</a> |
+				
+
 		</li>
 		
 		<?php if(isset($_SESSION["loggedin"])) : ?>

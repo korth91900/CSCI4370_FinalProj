@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 01, 2022 at 07:23 PM
--- Server version: 10.4.20-MariaDB
--- PHP Version: 8.0.9
+-- Generation Time: May 10, 2022 at 03:33 AM
+-- Server version: 10.4.21-MariaDB
+-- PHP Version: 8.0.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,38 @@ SET time_zone = "+00:00";
 --
 -- Database: `book_tracker`
 --
+
+DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getallBooks` ()  select * from booksrestricted$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getBook` (IN `bookid` INT(20))  select * from books where books.bid = bookid$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUser` (IN `uName` VARCHAR(100))  SELECT * from customer where username = uName$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `searchBookGenre` (IN `genreParam` VARCHAR(50))  SELECT ISBN, title,author,publisher,release_date,description,image FROM bookgenre inner join genre on genre.gid = bookgenre.gid inner join booksrestricted on bookgenre.bid=books.bid where genre.genre_name = genreParam$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `searchBooks` (IN `col_name` VARCHAR(100), IN `inp` VARCHAR(100))  BEGIN
+  SET @t1 = CONCAT( 'SELECT * FROM booksrestricted where ',col_name, ' like "%',inp,'%"' ); -- <-- placeholder
+  
+
+  PREPARE stmt3 FROM @t1;
+  EXECUTE stmt3; -- <-- input for placeholder
+  DEALLOCATE PREPARE stmt3;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `searchBooksUnres` (IN `col_name` VARCHAR(100), IN `inp` VARCHAR(100))  BEGIN
+  SET @t1 = CONCAT( 'SELECT * FROM booksunrestricted where ',col_name, ' like "%',inp,'%"' ); -- <-- placeholder
+  
+
+  PREPARE stmt3 FROM @t1;
+  EXECUTE stmt3; -- <-- input for placeholder
+  DEALLOCATE PREPARE stmt3;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -59,7 +91,11 @@ INSERT INTO `bookgenre` (`bid`, `gid`) VALUES
 (5, 1),
 (5, 31),
 (5, 32),
-(6, 33);
+(6, 33),
+(7, 25),
+(7, 30),
+(7, 8),
+(7, 17);
 
 -- --------------------------------------------------------
 
@@ -76,20 +112,22 @@ CREATE TABLE `books` (
   `description` varchar(700) NOT NULL,
   `release_date` date DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL,
-  `reviewScore` double(11,1) DEFAULT NULL
+  `reviewScore` double(11,1) DEFAULT NULL,
+  `clearance` int(11) NOT NULL DEFAULT 2
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `books`
 --
 
-INSERT INTO `books` (`bid`, `ISBN`, `title`, `author`, `publisher`, `description`, `release_date`, `image`, `reviewScore`) VALUES
-(1, 439708184, 'Harry Potter and the Sorcerer\'s Stone', 'J.K. Rowling', 'Bloombury', 'Harry Potter\'s life is miserable. His parents are dead and he\'s stuck with his heartless relatives, who force him to live in a tiny closet under the stairs. But his fortune changes when he receives a letter that tells him the truth about himself: he\'s a wizard. A mysterious visitor rescues him from his relatives and takes him to his new home, Hogwarts School of Witchcraft and Wizardry. But even within the Wizarding community, he is special. He is the boy who lived: the only person to have ever survived a killing curse inflicted by the evil Lord Voldemort. This is Harry\'s first year at Hogwarts.', '1997-06-26', 'Harry_Potter_Sorcerer_Stone.jpg', 5.0),
-(2, 439064872, 'Harry Potter and the Chamber of Secrets', 'J.K. Rowling', 'Bloombury', 'Ever since Harry Potter had come home for the summer, the Dursleys had been so mean and hideous that all Harry wanted was to get back to the Hogwarts School for Witchcraft and Wizardry. But just as he\'s packing his bags, Harry receives a warning from a strange impish creature who says that if Harry returns to Hogwarts, disaster will strike. And strike it does. For in Harry\'s second year at Hogwarts, fresh torments and horrors arise, including an outrageously stuck-up new professor and a spirit who haunts the girls\' bathroom. But then the real trouble begins - someone is turning Hogwarts students to stone.', '1999-06-02', 'Harry_Potter_Chamber_of_Secrets.jpg', 3.5),
-(3, 307743659, 'The Shining', 'Stephen King', 'Doubleday', 'Jack Torrance\'s new job at the Overlook Hotel is the perfect chance for a fresh start. As the off-season caretaker at the atmospheric old hotel, he\'ll have plenty of time to spend reconnecting with his family and working on his writing. But as the harsh winter weather sets in, the idyllic location feels ever more remote...and more sinister. And the only one to notice the strange and terrible forces gathering around the Overlook is Danny Torrance, a uniquely gifted five-year-old.', '1977-01-28', 'The_Shining.jpg', 4.0),
-(4, 446310786, 'To Kill A Mockingbird', 'Harper Lee', 'J. B. Lippincott & Co.', 'Set in the small Southern town of Maycomb, Alabama, during the Depression, To Kill a Mockingbird follows three years in the life of 8-year-old Scout Finch, her brother, Jem, and their father, Atticus--three years punctuated by the arrest and eventual trial of a young black man accused of raping a white woman.', '1960-07-11', 'To_Kill_A_Mockingbird.jpg', 3.0),
-(5, 1503280780, 'Moby Dick', 'Herman Melville', 'Richard Bentley', 'The book is the sailor Ishmael\'s narrative of the obsessive quest of Ahab, captain of the whaling ship Pequod, for revenge on Moby Dick, the giant white sperm whale that on the ship\'s previous voyage bit off Ahab\'s leg at the knee.', '1851-10-18', 'Moby_Dick.jpg', 1.0),
-(6, 684801523, 'The Great Gatsby', 'F. Scott Fitzgerald', 'Charles Scribner\'s Sons', 'Set in Jazz Age New York, it tells the tragic story of Jay Gatsby, a self-made millionaire, and his pursuit of Daisy Buchanan, a wealthy young woman whom he loved in his youth. The book is narrated by Nick Carraway, who recounts the events of the summer of 1922, after he takes a house in the fictional village of West Egg on Long Island.', '1925-04-10', 'The_Great_Gatsby.jpg', 2.0);
+INSERT INTO `books` (`bid`, `ISBN`, `title`, `author`, `publisher`, `description`, `release_date`, `image`, `reviewScore`, `clearance`) VALUES
+(1, 439708184, 'Harry Potter and the Sorcerer\'s Stone', 'J.K. Rowling', 'Bloombury', 'Harry Potter\'s life is miserable. His parents are dead and he\'s stuck with his heartless relatives, who force him to live in a tiny closet under the stairs. But his fortune changes when he receives a letter that tells him the truth about himself: he\'s a wizard. A mysterious visitor rescues him from his relatives and takes him to his new home, Hogwarts School of Witchcraft and Wizardry. But even within the Wizarding community, he is special. He is the boy who lived: the only person to have ever survived a killing curse inflicted by the evil Lord Voldemort. This is Harry\'s first year at Hogwarts.', '1997-06-26', 'Harry_Potter_Sorcerer_Stone.jpg', 5.0, 2),
+(2, 439064872, 'Harry Potter and the Chamber of Secrets', 'J.K. Rowling', 'Bloombury', 'Ever since Harry Potter had come home for the summer, the Dursleys had been so mean and hideous that all Harry wanted was to get back to the Hogwarts School for Witchcraft and Wizardry. But just as he\'s packing his bags, Harry receives a warning from a strange impish creature who says that if Harry returns to Hogwarts, disaster will strike. And strike it does. For in Harry\'s second year at Hogwarts, fresh torments and horrors arise, including an outrageously stuck-up new professor and a spirit who haunts the girls\' bathroom. But then the real trouble begins - someone is turning Hogwarts students to stone.', '1999-06-02', 'Harry_Potter_Chamber_of_Secrets.jpg', 3.5, 2),
+(3, 307743659, 'The Shining', 'Stephen King', 'Doubleday', 'Jack Torrance\'s new job at the Overlook Hotel is the perfect chance for a fresh start. As the off-season caretaker at the atmospheric old hotel, he\'ll have plenty of time to spend reconnecting with his family and working on his writing. But as the harsh winter weather sets in, the idyllic location feels ever more remote...and more sinister. And the only one to notice the strange and terrible forces gathering around the Overlook is Danny Torrance, a uniquely gifted five-year-old.', '1977-01-28', 'The_Shining.jpg', 4.0, 2),
+(4, 446310786, 'To Kill A Mockingbird', 'Harper Lee', 'J. B. Lippincott & Co.', 'Set in the small Southern town of Maycomb, Alabama, during the Depression, To Kill a Mockingbird follows three years in the life of 8-year-old Scout Finch, her brother, Jem, and their father, Atticus--three years punctuated by the arrest and eventual trial of a young black man accused of raping a white woman.', '1960-07-11', 'To_Kill_A_Mockingbird.jpg', 3.0, 2),
+(5, 1503280780, 'Moby Dick', 'Herman Melville', 'Richard Bentley', 'The book is the sailor Ishmael\'s narrative of the obsessive quest of Ahab, captain of the whaling ship Pequod, for revenge on Moby Dick, the giant white sperm whale that on the ship\'s previous voyage bit off Ahab\'s leg at the knee.', '1851-10-18', 'Moby_Dick.jpg', 1.0, 2),
+(6, 684801523, 'The Great Gatsby', 'F. Scott Fitzgerald', 'Charles Scribner\'s Sons', 'Set in Jazz Age New York, it tells the tragic story of Jay Gatsby, a self-made millionaire, and his pursuit of Daisy Buchanan, a wealthy young woman whom he loved in his youth. The book is narrated by Nick Carraway, who recounts the events of the summer of 1922, after he takes a house in the fictional village of West Egg on Long Island.', '1925-04-10', 'The_Great_Gatsby.jpg', 2.0, 2),
+(7, 3, 'Necronomicon', 'Abdul Alhazred', 'Self Published', 'The so-called \"Book of the Dead\", was written by a mad necromancer a thousand years ago. Teaches you the history of the Old Ones and how to summon them.', '0967-08-03', 'necronomicon.png', 5.0, 1);
 
 -- --------------------------------------------------------
 
@@ -113,7 +151,46 @@ INSERT INTO `bookshelf` (`bkid`, `cid`, `bid`, `note`, `status`) VALUES
 (1, 4, 1, '', 'Finished'),
 (2, 4, 2, 'I love Dobby!!!', 'Finished'),
 (3, 5, 1, NULL, 'Not Started'),
-(4, 5, 3, NULL, 'Not Started');
+(4, 5, 3, NULL, 'Not Started'),
+(5, 7, 7, NULL, 'Not Started');
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `booksrestricted`
+-- (See below for the actual view)
+--
+CREATE TABLE `booksrestricted` (
+`bid` int(11)
+,`ISBN` int(13)
+,`title` varchar(50)
+,`author` varchar(50)
+,`publisher` varchar(50)
+,`description` varchar(700)
+,`release_date` date
+,`image` varchar(255)
+,`reviewScore` double(11,1)
+,`clearance` int(11)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `booksunrestricted`
+-- (See below for the actual view)
+--
+CREATE TABLE `booksunrestricted` (
+`bid` int(11)
+,`ISBN` int(13)
+,`title` varchar(50)
+,`author` varchar(50)
+,`publisher` varchar(50)
+,`description` varchar(700)
+,`release_date` date
+,`image` varchar(255)
+,`reviewScore` double(11,1)
+,`clearance` int(11)
+);
 
 -- --------------------------------------------------------
 
@@ -127,17 +204,19 @@ CREATE TABLE `customer` (
   `password` varchar(255) NOT NULL,
   `phone` varchar(16) NOT NULL,
   `username` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL
+  `email` varchar(50) NOT NULL,
+  `clearance` int(11) NOT NULL DEFAULT 2
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `customer`
 --
 
-INSERT INTO `customer` (`cid`, `full_name`, `password`, `phone`, `username`, `email`) VALUES
-(4, 'Kyle Orth', '$2y$10$2lQEIOXjVGBvXf344g.UBOVEAcFpHr/82pVKACs/k68ktGMHn.hja', '1234567890', 'korth', 'email@gmail.com'),
-(5, 'John Smith', '$2y$10$GjviSkhE21Hh4ni.ax6jCO69H.8QoQT8dsMhfcrHBz8vO1ISjkv6m', '0987654321', 'JohnBoy', 'johnny@gmail.com'),
-(6, 'Tom Bell', '$2y$10$9ErGHPyppzTSnL/25PT6BuiUo6oKiz23XTEYX77bwNoqQPtTRJayO', '1234098765', 'ScaredOfWater', 'nowater@gmail.com');
+INSERT INTO `customer` (`cid`, `full_name`, `password`, `phone`, `username`, `email`, `clearance`) VALUES
+(4, 'Kyle Orth', '$2y$10$2lQEIOXjVGBvXf344g.UBOVEAcFpHr/82pVKACs/k68ktGMHn.hja', '1234567890', 'korth', 'email@gmail.com', 2),
+(5, 'John Smith', '$2y$10$GjviSkhE21Hh4ni.ax6jCO69H.8QoQT8dsMhfcrHBz8vO1ISjkv6m', '0987654321', 'JohnBoy', 'johnny@gmail.com', 2),
+(6, 'Tom Bell', '$2y$10$9ErGHPyppzTSnL/25PT6BuiUo6oKiz23XTEYX77bwNoqQPtTRJayO', '1234098765', 'ScaredOfWater', 'nowater@gmail.com', 2),
+(7, 'Gautam L', '$2y$10$AYqSes7rmSjVxQMjWV/0cOTTq8LUIDf5gagny80gR8maecOOOLCYW', '5165472059', 'pog', 'pog@gmail.com', 1);
 
 -- --------------------------------------------------------
 
@@ -216,7 +295,8 @@ INSERT INTO `review` (`rid`, `bid`, `cid`, `score`, `review_text`) VALUES
 (6, 3, 5, 4, 'Stephen King truly know how to build an unsettling atmosphere in his novels. One of my favorites of his works!'),
 (7, 5, 6, 1, 'If you are like me and are scared of the ocean, I recommend you don\'t read this book as there is water everywhere!'),
 (8, 4, 6, 3, 'The trial scenes really resonated with me!'),
-(9, 2, 6, 3, 'Everything about the book was great except for all of the water in the Chamber of Secrets.');
+(9, 2, 6, 3, 'Everything about the book was great except for all of the water in the Chamber of Secrets.'),
+(10, 7, 7, 5, 'Very Pog book, I am clinicaly insane after reading it.');
 
 --
 -- Triggers `review`
@@ -227,32 +307,6 @@ CREATE TRIGGER `updateAverage` AFTER INSERT ON `review` FOR EACH ROW UPDATE book
   WHERE bid = NEW.bid
 $$
 DELIMITER ;
-
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getallBooks`()
-select * from books$$
-DELIMITER ;
-
-
-
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `searchBookGenre`(IN `genreParam` VARCHAR(50))
-SELECT ISBN, title,author,publisher,release_date,description,image FROM bookgenre inner join genre on genre.gid = bookgenre.gid inner join books on bookgenre.bid=books.bid where genre.genre_name = genreParam$$
-DELIMITER ;
-
-DELIMITER $$
-CREATE DEFINER=root@localhost PROCEDURE searchBooks(IN col_name VARCHAR(100), IN inp VARCHAR(100))
-BEGIN
-  SET @t1 = CONCAT( 'SELECT * FROM books where ',col_name, ' like "%',inp,'%"' ); -- <-- placeholder
-
-
-  PREPARE stmt3 FROM @t1;
-  EXECUTE stmt3; -- <-- input for placeholder
-  DEALLOCATE PREPARE stmt3;
-END$$
-DELIMITER ;
-
-
 
 -- --------------------------------------------------------
 
@@ -272,7 +326,26 @@ CREATE TABLE `wishlist` (
 --
 
 INSERT INTO `wishlist` (`wid`, `cid`, `bid`, `note`) VALUES
-(1, 4, 5, NULL);
+(1, 4, 5, NULL),
+(2, 7, 7, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `booksrestricted`
+--
+DROP TABLE IF EXISTS `booksrestricted`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `booksrestricted`  AS SELECT `books`.`bid` AS `bid`, `books`.`ISBN` AS `ISBN`, `books`.`title` AS `title`, `books`.`author` AS `author`, `books`.`publisher` AS `publisher`, `books`.`description` AS `description`, `books`.`release_date` AS `release_date`, `books`.`image` AS `image`, `books`.`reviewScore` AS `reviewScore`, `books`.`clearance` AS `clearance` FROM `books` WHERE `books`.`clearance` > 1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `booksunrestricted`
+--
+DROP TABLE IF EXISTS `booksunrestricted`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `booksunrestricted`  AS SELECT `books`.`bid` AS `bid`, `books`.`ISBN` AS `ISBN`, `books`.`title` AS `title`, `books`.`author` AS `author`, `books`.`publisher` AS `publisher`, `books`.`description` AS `description`, `books`.`release_date` AS `release_date`, `books`.`image` AS `image`, `books`.`reviewScore` AS `reviewScore`, `books`.`clearance` AS `clearance` FROM `books` WHERE `books`.`clearance` >= 1 ;
 
 --
 -- Indexes for dumped tables
@@ -336,19 +409,19 @@ ALTER TABLE `wishlist`
 -- AUTO_INCREMENT for table `books`
 --
 ALTER TABLE `books`
-  MODIFY `bid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `bid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `bookshelf`
 --
 ALTER TABLE `bookshelf`
-  MODIFY `bkid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `bkid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `genre`
@@ -360,13 +433,13 @@ ALTER TABLE `genre`
 -- AUTO_INCREMENT for table `review`
 --
 ALTER TABLE `review`
-  MODIFY `rid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `rid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `wishlist`
 --
 ALTER TABLE `wishlist`
-  MODIFY `wid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `wid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables

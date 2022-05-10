@@ -18,5 +18,5 @@ $statement1 -> bindValue(':score', $score);
 $statement1 -> bindValue(':bid', $book);
 $statement1->execute();
 $statement1->closeCursor();
-// header("Location: homepage.php");
+
 ?>
